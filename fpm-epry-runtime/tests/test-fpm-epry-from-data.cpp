@@ -51,7 +51,7 @@ stretchContrast(fmat input) {
     const float vmin = input.min();
     const float vmax = input.max();
     Mat<uint8_t> stretched = conv_to<Mat<uint8_t>>::from(  //
-        (input - vmin) * 255.0f / (vmax - vmin));
+        (input - vmin) * 255.0f / (vmax - vmin + 1e-12f));
 
     return stretched;
 }

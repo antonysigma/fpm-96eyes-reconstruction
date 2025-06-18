@@ -8,8 +8,8 @@
 #include "high_res_init.h"
 
 using namespace arma;
-using Halide::Runtime::Buffer;
 using Catch::Matchers::WithinRel;
+using Halide::Runtime::Buffer;
 
 namespace {
 constexpr auto T = constants::tile_size;

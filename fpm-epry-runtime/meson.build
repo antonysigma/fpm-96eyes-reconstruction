@@ -35,7 +35,9 @@ fpm_epry_runner_smoke_test_exe = executable(
     sources: [
         'tests/fpm-runtime-smoke-test.cpp',
         'tests/test_high_res_init.cpp',
+        'tests/test_high_res_restore.cpp',
         halide_generated_bin['high_res_init'],
+        halide_generated_bin['high_res_restore'],
     ],
     include_directories: [
         'inc',
