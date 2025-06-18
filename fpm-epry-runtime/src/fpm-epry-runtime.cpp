@@ -35,6 +35,7 @@ FPMEpryRunner::FPMEpryRunner(arma::Mat<int32_t> _k_offset, ComplexBuffer p, Buff
         const auto has_error = low_res_init(raw, gamma, low_res);
         assert(!has_error);
     }
+    low_res.set_host_dirty();
     {
         const auto has_error = high_res_init(low_res, f_high_res);
         assert(!has_error);

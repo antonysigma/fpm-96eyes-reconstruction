@@ -27,7 +27,7 @@ SCENARIO("Cropped inverse FFT is valid", "[high_res_init]") {
             Buffer<float, 3> high_res{2, T, T};
 
             // Fill impossible values.
-            high_res.fill(datum::nan);
+            high_res.fill(-1.0f);
 
             f_high_res_buffer.set_host_dirty();
             const auto has_error = high_res_restore(f_high_res_buffer, high_res);
