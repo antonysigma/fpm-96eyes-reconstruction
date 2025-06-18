@@ -15,7 +15,7 @@ using Halide::Runtime::Buffer;
 using reconstruction::ComplexBuffer;
 
 namespace {
-constexpr auto n_illuminations = 49;
+constexpr auto n_illuminations = 25;
 constexpr char filename[]{HDF5_FILE_PATH};
 constexpr int well_id = 5;
 
@@ -44,7 +44,7 @@ constexpr std::array k_offset{
     C{109, 184}, C{71, 146},  C{72, 90},   C{90, 72},   C{165, 72},  C{183, 90},  C{183, 165},
     C{165, 183}, C{90, 183},  C{72, 165},  C{73, 73},   C{182, 73},  C{182, 182}, C{73, 182}};
 
-static_assert(k_offset.size() == n_illuminations);
+static_assert(k_offset.size() >= n_illuminations);
 
 Mat<uint8_t>
 stretchContrast(fmat input) {

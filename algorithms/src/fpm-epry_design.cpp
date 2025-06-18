@@ -223,7 +223,7 @@ FPMEpry::design() {
         }
 
         const auto& most_recent_high_res = high_res.back();
-        high_res_new(i, x, y) =
+        high_res_new(x, y, i) =
             mux(i, {most_recent_high_res(x, y).re(), most_recent_high_res(x, y).im()});
 
         // Fill with zeros to indicate no action.
