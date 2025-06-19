@@ -34,6 +34,13 @@ getFirstNFrameId(const size_t n) {
     return frame_id;
 }
 
+std::vector<size_t>
+getGenericFrameId(const size_t n) {
+    std::vector<size_t> frame_id(n);
+    std::iota(frame_id.begin(), frame_id.end(), 0);
+    return frame_id;
+}
+
 template <typename T>
 struct coord_t {
     T kx{};
@@ -43,13 +50,13 @@ static_assert(sizeof(coord_t<int32_t>) == sizeof(int32_t) * 2);
 
 using C = coord_t<int32_t>;
 constexpr std::array k_offset{
-    C{128, 128}, C{128, 108}, C{147, 128}, C{128, 147}, C{108, 128}, C{108, 108}, C{147, 108},
-    C{147, 147}, C{108, 147}, C{128, 166}, C{89, 128},  C{166, 128}, C{128, 89},  C{89, 108},
-    C{108, 89},  C{147, 89},  C{166, 108}, C{166, 147}, C{147, 166}, C{108, 166}, C{89, 147},
-    C{90, 165},  C{165, 165}, C{90, 90},   C{165, 90},  C{128, 71},  C{184, 128}, C{128, 184},
-    C{71, 128},  C{71, 146},  C{109, 184}, C{146, 184}, C{184, 146}, C{184, 109}, C{146, 71},
-    C{109, 71},  C{71, 109},  C{72, 90},   C{90, 72},   C{165, 72},  C{183, 90},  C{183, 165},
-    C{165, 183}, C{90, 183},  C{72, 165},  C{73, 73},   C{182, 73},  C{182, 182}, C{73, 182}};
+    C{128, 128}, C{108, 108}, C{128, 108}, C{147, 108}, C{147, 128}, C{147, 147}, C{128, 147},
+    C{108, 147}, C{108, 128}, C{89, 108},  C{108, 89},  C{128, 89},  C{147, 89},  C{166, 108},
+    C{166, 128}, C{166, 147}, C{147, 166}, C{128, 166}, C{108, 166}, C{89, 147},  C{89, 128},
+    C{71, 109},  C{72, 90},   C{90, 90},   C{90, 72},   C{109, 71},  C{128, 71},  C{146, 71},
+    C{165, 72},  C{165, 90},  C{183, 90},  C{184, 109}, C{184, 128}, C{184, 146}, C{183, 165},
+    C{165, 165}, C{165, 183}, C{146, 184}, C{128, 184}, C{109, 184}, C{90, 183},  C{90, 165},
+    C{72, 165},  C{71, 146},  C{71, 128},  C{73, 73},   C{182, 73},  C{182, 182}, C{73, 182}};
 static_assert(k_offset.size() >= n_illuminations);
 
 Mat<uint8_t>
@@ -118,12 +125,12 @@ SCENARIO("Can run EPRY algorithm smoothly") {
 
                 AND_THEN("Can download high res image") {
                     const auto high_res = runner.computeHighRes();
-                    REQUIRE(real(high_res).is_finite());
-                    REQUIRE(imag(high_res).is_finite());
-
                     stretchContrast(trans(real(high_res)))
                         .save("small-roi-magnitude.pgm", pgm_binary);
                     stretchContrast(trans(imag(high_res))).save("small-roi-phase.pgm", pgm_binary);
+
+                    REQUIRE(real(high_res).is_finite());
+                    REQUIRE(imag(high_res).is_finite());
                 }
             }
         }

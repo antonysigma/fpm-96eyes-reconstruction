@@ -55,8 +55,7 @@ SCENARIO("Can find wavevector by fixed-point iterations") {
                     using namespace arma;
                     umat all_offset(2, n_leds);
                     for (auto i = 0; i < n_leds; i++) {
-                        all_offset.col(i) =
-                            wavevector_engine.getOffset(wavevector_engine.sort_radius(i));
+                        all_offset.col(i) = wavevector_engine.getOffset(wavevector_engine.imseq(i));
                     }
 
                     REQUIRE(all_offset.is_finite());

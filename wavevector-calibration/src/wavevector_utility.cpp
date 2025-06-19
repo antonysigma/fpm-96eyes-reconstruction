@@ -84,7 +84,7 @@ WavevectorOverMeniscus::solve(const arma::cx_double tile_position) {
     // Map to pixels in FFT space
 
     // Sort by magnitude and phase angle
-    sort_radius = arma::sort_index(k);
+    const arma::umat sort_radius = arma::sort_index(k);
     imseq = arma::sort_index(arma::round(k / k(sort_radius(1))) +
                              arma::arg(solution) / arma::datum::pi / 2);
 
