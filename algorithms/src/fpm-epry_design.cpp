@@ -227,7 +227,7 @@ FPMEpry::design() {
             mux(i, {most_recent_high_res(x, y).re(), most_recent_high_res(x, y).im()});
 
         // Fill with zeros to indicate no action.
-        pupil_new(i, x, y) = 0.0f;
+        pupil_new(i, x, y) = pupil_prev(i, x, y);
         return;
     }
 

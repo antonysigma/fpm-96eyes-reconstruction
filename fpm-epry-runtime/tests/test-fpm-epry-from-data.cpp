@@ -15,7 +15,7 @@ using Halide::Runtime::Buffer;
 using reconstruction::ComplexBuffer;
 
 namespace {
-constexpr auto n_illuminations = 5;
+constexpr auto n_illuminations = 25;
 constexpr char filename[]{HDF5_FILE_PATH};
 constexpr int well_id = 5;
 
@@ -118,6 +118,8 @@ SCENARIO("Can run EPRY algorithm smoothly") {
 
                 AND_THEN("Can download high res image") {
                     const auto high_res = runner.computeHighRes();
+                    REQUIRE(real(high_res).is_finite());
+                    REQUIRE(imag(high_res).is_finite());
 
                     stretchContrast(trans(real(high_res)))
                         .save("small-roi-magnitude.pgm", pgm_binary);
