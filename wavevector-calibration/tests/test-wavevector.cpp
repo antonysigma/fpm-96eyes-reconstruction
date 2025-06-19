@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "wavevector_utility.hpp"
+#include "constants.hpp"
 
 SCENARIO("Can find wavevector by fixed-point iterations") {
     constexpr auto n_leds = 49;
@@ -35,8 +36,8 @@ SCENARIO("Can find wavevector by fixed-point iterations") {
             REQUIRE(wavevector_engine.solution.is_finite());
 
             THEN("Wavevector of center LED has small values") {
-                constexpr auto tile_width = 256;
-                wavevector_engine.tile_width = tile_width;
+                using constants::tile_size;
+                wavevector_engine.tile_width = tile_size;
                 wavevector_engine.pixel_size = 0.4375e-6;
                 wavevector_engine.wavelength = 533e-9;
                 wavevector_engine.zeropad_factor = 2;
@@ -46,8 +47,8 @@ SCENARIO("Can find wavevector by fixed-point iterations") {
 
                 {
                     using namespace types;
-                    REQUIRE(std::abs(static_cast<int32_t>(offset(X)) - tile_width / 2) <= 20);
-                    REQUIRE(std::abs(static_cast<int32_t>(offset(Y)) - tile_width / 2) <= 20);
+                    REQUIRE(std::abs(static_cast<int32_t>(offset(X)) - tile_size / 2) <= 20);
+                    REQUIRE(std::abs(static_cast<int32_t>(offset(Y)) - tile_size / 2) <= 20);
                 }
 
                 AND_THEN("Valid wavevector values") {
