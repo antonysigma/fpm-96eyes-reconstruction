@@ -15,15 +15,22 @@ using Halide::Runtime::Buffer;
 using reconstruction::ComplexBuffer;
 
 namespace {
-constexpr auto n_illuminations = 25;
+constexpr auto n_illuminations = 5;
 constexpr char filename[]{HDF5_FILE_PATH};
 constexpr int well_id = 5;
 
-std::vector<size_t>
-getGenericFrameId() {
-    std::vector<size_t> frame_id(n_illuminations);
+/** Low-resolution frames, sorted by lateral LED offsets from the optical axis.
+ * */
+constexpr std::array low_res_frame_id{0,  5,  1,  6,  2,  7,  3,  8,  4,  13, 14, 9,  15,
+                                      16, 10, 17, 18, 11, 19, 20, 12, 29, 37, 21, 38, 30,
+                                      25, 31, 39, 22, 40, 32, 26, 33, 41, 23, 42, 34, 27,
+                                      35, 43, 24, 44, 36, 28, 45, 46, 47, 48};
+static_assert(low_res_frame_id.size() >= n_illuminations);
 
-    std::iota(frame_id.begin(), frame_id.end(), 0);
+std::vector<size_t>
+getFirstNFrameId(const size_t n) {
+    std::vector<size_t> frame_id(n);
+    std::copy_n(low_res_frame_id.begin(), n, frame_id.begin());
     return frame_id;
 }
 
@@ -70,7 +77,7 @@ SCENARIO("Can run EPRY algorithm smoothly") {
             const storage::roi_t center_roi{2592 / 2 - tile_size / 2, 1944 / 2 - tile_size / 2,
                                             tile_size};
             auto raw = storage::readFPMRaw(file.getDataSet("imlow"), well_id, center_roi,
-                                           getGenericFrameId());
+                                           getFirstNFrameId(n_illuminations));
 
             {
                 Cube<uint8_t> raw_buffer{raw.data(),      tile_size, tile_size,

@@ -46,7 +46,7 @@ replaceIntensity(const ComplexFunc& simulated, const Func& low_res,
 std::pair<Func, Func>
 normInf(const ComplexFunc input, const RDom& r, const std::string& label) {
     Func sumsq{"sumsq_" + label};
-    sumsq(x, y) = re(input(x, y)) * re(input(x, y)) + im(input(x, y)) * im(input(x, y));
+    sumsq(x, y) = re(input(x, y) * conj(input(x, y)));
 
     Func alpha{label};
     alpha(x) = 0.0f;

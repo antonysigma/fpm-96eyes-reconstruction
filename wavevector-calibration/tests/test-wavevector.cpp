@@ -60,6 +60,7 @@ SCENARIO("Can find wavevector by fixed-point iterations") {
 
                     REQUIRE(all_offset.is_finite());
                     // umat(trans(all_offset)).print("k_offset =");
+                    // wavevector_engine.imseq.print("imseq =");
                 }
             }
         }
