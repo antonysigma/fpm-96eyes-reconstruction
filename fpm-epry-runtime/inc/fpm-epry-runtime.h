@@ -32,6 +32,9 @@ class FPMEpryRunner {
     /** Download the pupil function. */
     arma::cx_fmat downloadPupil();
 
+    /** Download the high-frequency Fourier spectrum. */
+    arma::cx_fmat downloadFourierPlane();
+
     const int32_t n_illuminations;
 
    private:

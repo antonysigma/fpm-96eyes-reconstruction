@@ -8,6 +8,10 @@
 #include "high_res_restore.h"
 #include "low_res_init.h"
 
+using arma::cx_float;
+using arma::cx_fmat;
+using arma::fcube;
+
 namespace reconstruction {
 
 using constants::tile_size;
@@ -99,10 +103,16 @@ FPMEpryRunner::computeHighRes() {
     return high_res;
 }
 
+cx_fmat
+FPMEpryRunner::downloadFourierPlane() {
+    f_high_res.copy_to_host();
+    const fcube f_high_res_buffer{f_high_res.data(), tile_size * 2, tile_size * 2, 2, false, true};
+
+    return cx_fmat{f_high_res_buffer.slice(0), f_high_res_buffer.slice(1)};
+}
+
 arma::cx_fmat
 FPMEpryRunner::downloadPupil() {
-    using arma::cx_float;
-
     pupil.copy_to_host();
     return arma::cx_fmat{reinterpret_cast<cx_float*>(pupil.data()), tile_size, tile_size, false,
                          true};
