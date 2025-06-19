@@ -6,10 +6,10 @@ class WavevectorOverMeniscus {
     /** Wavevector. */
     arma::vec k;
 
+   public:
     /** Sort the wavevector by increasing radius. */
     arma::uvec sort_radius;
 
-   public:
     arma::cx_vec led_position, solution;
 
     arma::uvec imseq;
