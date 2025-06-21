@@ -143,7 +143,7 @@ likely(ComplexExpr z) {
 
 inline Halide::Expr
 abs(const ComplexExpr& x) {
-    return sqrt(re(x) * re(x) + im(x) * im(x));
+    return sqrt(re(x * conj(x)));
 }
 
 inline Halide::Expr

@@ -129,6 +129,14 @@ SCENARIO("Can run EPRY algorithm smoothly") {
                         .save("small-roi-magnitude.pgm", pgm_binary);
                     stretchContrast(trans(imag(high_res))).save("small-roi-phase.pgm", pgm_binary);
 
+                    const auto f_high_res = runner.downloadFourierPlane();
+                    const fmat frequency_spectrum = sqrt(real(f_high_res % conj(f_high_res)));
+
+                    const float vmax = frequency_spectrum.max();
+                    const fmat log_spectrum =
+                        log10(clamp(frequency_spectrum, vmax * 1e-6f, datum::inf));
+                    stretchContrast(log_spectrum).save("small-roi-spectrum.pgm", pgm_binary);
+
                     REQUIRE(real(high_res).is_finite());
                     REQUIRE(imag(high_res).is_finite());
                 }

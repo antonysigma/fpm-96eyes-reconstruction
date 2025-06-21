@@ -30,10 +30,10 @@ generateLR(const ComplexFunc& high_res, const Func& offset, const int32_t k,
 }
 
 std::pair<ComplexFunc, Func>
-replaceIntensity(const ComplexFunc& simulated, const Func& low_res,
-                 const int32_t illumination_idx) {
+replaceIntensity(const ComplexFunc& simulated, const Func& low_res, const int32_t illumination_idx,
+                 const float eps = 1e-6f) {
     const Func magn{"magn_low_res"};
-    magn(x, y) = abs(simulated(x, y)) + 1e-6f;
+    magn(x, y) = abs(simulated(x, y)) + eps;
 
     const ComplexExpr phase_angle = simulated(x, y) / magn(x, y);
 
@@ -157,27 +157,27 @@ FPMEpry::design() {
         const auto f_estimated =
             generateLR(high_res_prev, k_offset, illumination_idx, current_pupil, width);
 
+        // Compensate the FFT gain
+        ComplexFunc f_normalized{"f_normalized"};
+        f_normalized(x, y) = f_estimated(x, y) / tile_size / tile_size;
+
         // Simulate the low resolution image in the object plane.
         ComplexFunc estimated;
         Func f_estimated_interleaved;
         Func ifft2;
         std::tie(estimated, ifft2, f_estimated_interleaved) =
-            fft2C2C(f_estimated, width, INVERSE, "f_estimated_interleaved");
+            fft2C2C(f_normalized, width, INVERSE, "f_estimated_interleaved");
 
         // Replace the intensity.
         const auto [replaced, magn_low_res] =
             replaceIntensity(estimated, low_res, illumination_idx);
-
-        // Compensate the FFT gain
-        ComplexFunc normalized{"normalized"};
-        normalized(x, y) = replaced(x, y) / tile_size / tile_size;
 
         // Simulate the Fourier plane.
         ComplexFunc f_replaced;
         Func fft2;
         Func replaced_interleaved;
         std::tie(f_replaced, fft2, replaced_interleaved) =
-            fft2C2C(normalized, width, FORWARD, "replaced_interleaved");
+            fft2C2C(replaced, width, FORWARD, "replaced_interleaved");
 
         // Update the high resolution image in Fourier domain via backward
         // propagation.
