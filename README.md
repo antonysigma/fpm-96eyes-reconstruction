@@ -8,8 +8,9 @@ This repository is one of the following components of the 96-Eyes instrument des
 2. GPU-accelerated, Zernike-guided lens aberration recovery (FPM-EPRY) algorithm for
    brightfield-only FPM images, and graphical user interfaces;
 
-3. 96-Eyes instrument control code for concurrent, asynchronous camera capture
-   and disk I/O;
+3. [FPM problem formulation with weak-phase
+  prior](https://comp-imaging.github.io/ProxImaL/examples/index.html#joint-image-super-resolution-and-phase-retrieval-with-fourier-ptychographic-microscopy-fpm),
+  part of the [ProxImaL](https://github.com/comp-imaging/ProxImaL) project;
 
 4. Electronic circuit design and circuit board drawing of the illumination,
    thermal, and incubation modules;
