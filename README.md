@@ -12,7 +12,10 @@ This repository is one of the following components of the 96-Eyes instrument des
   prior](https://comp-imaging.github.io/ProxImaL/examples/index.html#joint-image-super-resolution-and-phase-retrieval-with-fourier-ptychographic-microscopy-fpm),
   part of the [ProxImaL](https://github.com/comp-imaging/ProxImaL) project;
 
-4. Electronic circuit design and circuit board drawing of the illumination,
+4. [96-Eyes instrument control code for concurrent, asynchronous
+  camera capture and disk I/O](https://github.com/Caltech-Biophotonics-Lab/bioimage-coder);
+
+5. Electronic circuit design and circuit board drawing of the illumination,
    thermal, and incubation modules;
 
 ## Status
