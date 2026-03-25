@@ -22,13 +22,14 @@ class FPMEpry : public Generator<FPMEpry> {
     Output<Buffer<float, 3>> pupil_new{"pupil_new"};
 
     GeneratorParam<uint32_t> n_illumination{"n_illumination", 3, 9, 49};
-    GeneratorParam<int32_t> fpm_mode{"fpm_mode", PUPIL_RECOVERY, AUTO_BRIGHTNESS, PUPIL_RECOVERY};
+    GeneratorParam<int32_t> fpm_mode{"fpm_mode", AUTO_BRIGHTNESS, AUTO_BRIGHTNESS, PUPIL_RECOVERY};
     GeneratorParam<int32_t> tile_size{"tile_size", 128, 0, 256};
 
     RDom r;
     Func sumsq_alpha;
     Func alpha;
     Func beta{"beta"};
+    Func reference_brightness{"reference_brightness"};
 
     std::vector<Func> f_estimated_interleaved;
     std::vector<Func> replaced_interleaved;

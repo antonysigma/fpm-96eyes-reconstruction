@@ -125,6 +125,14 @@ FPMEpry::implementation() {
             .unroll(i);
     }
 
+    const Var ki{"ki"};
+    reference_brightness.compute_root() //
+        .gpu_tile(k, ki, 32, TailStrategy::GuardWithIf);
+
+    reference_brightness.update(0)
+        .gpu_tile(k, ki, 32, TailStrategy::GuardWithIf);
+
+
     // Fuse zero-init, maximum(), and sqrt() into one single GPU kernel.
     alpha.compute_at(alpha.in(), x_vi);
 

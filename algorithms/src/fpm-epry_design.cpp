@@ -43,6 +43,21 @@ replaceIntensity(const ComplexFunc& simulated, const Func& low_res, const int32_
     return {replaced, magn};
 }
 
+std::pair<ComplexFunc, Func>
+replaceIntensityAndAutoContrast(const ComplexFunc& simulated, const Func& low_res,
+    const Expr scale_factor,
+    const int32_t illumination_idx,
+                 const float eps = 1e-6f) {
+    const Func magn{"magn_low_res"};
+    magn(x, y) = abs(simulated(x, y)) + eps;
+
+    const ComplexExpr phase_angle = simulated(x, y) / magn(x, y);
+
+    ComplexFunc replaced;
+    replaced(x, y) = phase_angle * low_res(x, y, illumination_idx) * scale_factor;
+
+    return {replaced, magn};
+}
 std::pair<Func, Func>
 normInf(const ComplexFunc input, const RDom& r, const std::string& label) {
     Func sumsq{"sumsq_" + label};
@@ -142,6 +157,9 @@ FPMEpry::design() {
     // Cropbox's width and height
     r = RDom(0, width, 0, width, "r");
 
+    reference_brightness(k) = 0.0f;
+    reference_brightness(k) += low_res(r.x, r.y, k);
+
     // Compute the max value of the pupil function.
     std::tie(alpha, sumsq_alpha) = normInf(pupil.front(), r, "alpha");
 
@@ -161,6 +179,11 @@ FPMEpry::design() {
         ComplexFunc f_normalized{"f_normalized"};
         f_normalized(x, y) = f_estimated(x, y) / tile_size / tile_size;
 
+        const Expr simulated_brightness = abs(high_res_prev(width, width)) / tile_size / tile_size;
+        Func scale_factor{"scale_factor"};
+        scale_factor() = simulated_brightness / reference_brightness(illumination_idx);
+        scale_factor.compute_root().gpu_single_thread();
+
         // Simulate the low resolution image in the object plane.
         ComplexFunc estimated;
         Func f_estimated_interleaved;
@@ -170,7 +193,7 @@ FPMEpry::design() {
 
         // Replace the intensity.
         const auto [replaced, magn_low_res] =
-            replaceIntensity(estimated, low_res, illumination_idx);
+            replaceIntensityAndAutoContrast(estimated, low_res, scale_factor(), illumination_idx);
 
         // Simulate the Fourier plane.
         ComplexFunc f_replaced;

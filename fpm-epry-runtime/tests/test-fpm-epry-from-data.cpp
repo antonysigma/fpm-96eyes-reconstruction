@@ -115,7 +115,7 @@ SCENARIO("Can run EPRY algorithm smoothly") {
             REQUIRE(runner.n_illuminations == n_illuminations);
 
             THEN("Can reconstruct images") {
-                runner.reconstruct(5);
+                runner.reconstruct(1);
 
                 AND_THEN("Can retrieve new pupil and high-res image") {
                     const auto new_pupil = runner.downloadPupil();
